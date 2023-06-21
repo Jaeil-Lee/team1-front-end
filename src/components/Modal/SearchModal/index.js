@@ -1,21 +1,13 @@
+import PostModal from '../PostModal';
 import { getPost } from '../../../api/posts';
+import { exchangeModal } from '../../utils/exchangeModal';
 import './SearchModal.css';
-
-/**
- * text에서 keyword를 찾아서 하이라이트 처리한다.
- * @param {string} text
- * @param {string} keyword
- * @returns {string} 하이라이트 처리된 text
- */
-function highlight(text, keyword) {
-  const regex = new RegExp(keyword, 'gi');
-
-  return text.replace(regex, `<span class="highlight">${keyword}</span>`);
-}
+import { highlight } from '../../utils/highlight';
 
 class SearchModal extends HTMLDivElement {
-  constructor() {
+  constructor(keyword = '') {
     super();
+
     this.classList.add('search-modal', 'modal-dialog');
     this.setAttribute('role', 'document');
 
@@ -24,7 +16,7 @@ class SearchModal extends HTMLDivElement {
     this.innerHTML = `
       <div class="search-box">
         <div class="search-bar">
-          <input type="text" name="searchInput" id="searchInput" autofocus>
+          <input type="text" name="searchInput" id="searchInput" autocomplete="off" autofocus>
           <button class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="content-list"></div>
@@ -32,6 +24,7 @@ class SearchModal extends HTMLDivElement {
     `;
 
     this.searchInput = this.querySelector('#searchInput');
+    this.searchInput.value = keyword;
     this.searchInput.addEventListener('keyup', (e) =>
       this.searchContents(e.target.value)
     );
@@ -41,12 +34,13 @@ class SearchModal extends HTMLDivElement {
 
   async connectedCallback() {
     this.contents = await getPost();
+    this.searchContents(this.searchInput.value);
   }
 
   searchContents(keyword) {
-    const contents = this.contents.filter(({ post_content }) =>
-      post_content.includes(keyword)
-    );
+    const contents = this.contents
+      .filter(({ post_content }) => post_content.includes(keyword))
+      .slice(0, 10);
 
     this.renderContents(contents, keyword);
   }
@@ -64,18 +58,20 @@ class SearchModal extends HTMLDivElement {
 }
 
 class Content extends HTMLDivElement {
-  constructor({ id, post_content, name, post_top_img }) {
+  constructor(post) {
     super();
     this.classList.add('content-item');
 
+    this.post = post;
+
     this.innerHTML = `
-      <span class="content">${post_content}</span>
-      <span class="username">${name}</span>
-      <img src="${post_top_img}" alt="">
+      <span class="content">${post.post_content}</span>
+      <img src="${post.post_top_img}" alt="">
+      <span class="username">${post.name}</span>
     `;
 
     this.addEventListener('click', () => {
-      console.log(id);
+      exchangeModal(new PostModal(post));
     });
   }
 }
