@@ -96,7 +96,8 @@ class PostModal extends HTMLDivElement {
   /* 1.7.a. 좋아요 하트 색 변경  + 숫자 변경*/
   hearClick() {
   /*this 현재 노드 */
-    const heartImg = this.querySelector(".heartimg");
+  // 다른 곳에서 변수가 중복되면 document로 찾을 수 없다
+    const heartImg = this.querySelector(".heartimg");  
     const countLikes = this.querySelector(".count-like"); 
 
     heartImg.addEventListener('click',()=>{
@@ -110,9 +111,7 @@ class PostModal extends HTMLDivElement {
         }
         this.pushPatch(this.data);
         countLikes.textContent = this.data.likes;
-      })
-
-
+    })
 
 
   } /* /hearClick */
