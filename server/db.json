@@ -6,7 +6,7 @@
       "nickname": "d556f8",
       "password": "1234",
       "img": "https://github.com/d556f8.png",
-      "userToken": "jwFzI95FDsTK9tQUPUBC"
+      "userToken": "lrCwCAsBGndU5ltjPHkF"
     },
     {
       "id": 7,
@@ -21,6 +21,13 @@
       "password": "123",
       "img": "",
       "id": 8
+    },
+    {
+      "name": "김지훈",
+      "nickname": "hetame",
+      "password": "asd5050",
+      "id": 9,
+      "userToken": "HQkg0hCQpkPpGWfeEC8P"
     }
   ],
   "profiles": [
